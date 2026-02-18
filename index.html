@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vishal Kumar Raj — Robotics Trainer & Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050a0e;
+  --bg2: #0a1520;
+  --surface: #0d1f2d;
+  --surface2: #112233;
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #7fff6e;
+  --text: #e8f4f8;
+  --muted: #6b8fa3;
+  --border: rgba(0,212,255,0.15);
+  --glow: rgba(0,212,255,0.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+
+/* GRID BG */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+
+/* CURSOR */
+#cursor{width:12px;height:12px;background:var(--accent);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;mix-blend-mode:screen;}
+#cursor-ring{width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.6;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4rem;backdrop-filter:blur(20px);background:rgba(5,10,14,.7);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Space Mono',monospace;font-size:1rem;color:var(--accent);letter-spacing:.15em;text-decoration:none;}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted);text-decoration:none;text-transform:uppercase;position:relative;transition:color .3s;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width .3s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-links a:hover::after{width:100%;}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:0 4rem;position:relative;overflow:hidden;z-index:1;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.orb1{width:500px;height:500px;background:rgba(0,212,255,.08);top:-100px;right:-100px;animation:floatOrb 8s ease-in-out infinite;}
+.orb2{width:300px;height:300px;background:rgba(255,107,53,.06);bottom:50px;left:200px;animation:floatOrb 8s 3s ease-in-out infinite;}
+.orb3{width:200px;height:200px;background:rgba(127,255,110,.05);top:200px;right:300px;animation:floatOrb 8s 5s ease-in-out infinite;}
+@keyframes floatOrb{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-30px) scale(1.05);}}
+
+.hero-content{max-width:800px;}
+.hero-tag{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.25em;color:var(--accent);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.8rem;opacity:0;animation:fadeUp .8s .2s forwards;}
+.hero-tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--accent);}
+.hero-name{font-family:'Syne',sans-serif;font-size:clamp(3rem,7vw,6.5rem);font-weight:800;line-height:.95;letter-spacing:-.02em;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .4s forwards;}
+.hero-name .l1{display:block;color:var(--text);}
+.hero-name .l2{display:block;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:1.1rem;color:var(--muted);line-height:1.7;max-width:540px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s .6s forwards;}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .8s forwards;}
+
+.btn-primary{padding:.85rem 2rem;background:var(--accent);color:var(--bg);font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;font-weight:700;border:none;cursor:none;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;display:inline-block;}
+.btn-primary::before{content:'';position:absolute;inset:0;background:var(--accent2);transform:translateX(-100%);transition:transform .4s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 30px var(--glow);}
+.btn-primary:hover::before{transform:translateX(0);}
+.btn-primary span{position:relative;z-index:1;}
+.btn-ghost{padding:.85rem 2rem;background:transparent;color:var(--accent);font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--border);cursor:none;transition:background .3s,border-color .3s,transform .3s;display:inline-block;}
+.btn-ghost:hover{background:rgba(0,212,255,.08);border-color:var(--accent);transform:translateY(-2px);}
+
+.hero-stats{position:absolute;right:4rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2rem;opacity:0;animation:fadeUp .8s 1s forwards;}
+.stat-item{text-align:right;}
+.stat-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--accent);line-height:1;}
+.stat-label{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-top:.3rem;}
+.stat-div{width:30px;height:1px;background:var(--border);margin-left:auto;margin-top:.5rem;}
+
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;opacity:0;animation:fadeIn 1s 1.8s forwards;}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scanLine 2s ease-in-out infinite;}
+@keyframes scanLine{0%,100%{transform:scaleY(1);opacity:1;}50%{transform:scaleY(.5);opacity:.4;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;background:var(--surface);position:relative;z-index:1;}
+.marquee-track{display:flex;gap:3rem;animation:marquee 22s linear infinite;white-space:nowrap;}
+.marquee-item{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:1.5rem;flex-shrink:0;}
+.mdot{width:4px;height:4px;border-radius:50%;background:var(--accent);}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* SECTION COMMONS */
+section{position:relative;z-index:1;}
+.section-label{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem;}
+.section-label::before{content:'';width:20px;height:1px;background:var(--accent);}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:1.5rem;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ABOUT */
+#about{padding:8rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;max-width:1300px;margin:0 auto;}
+.about-avatar{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--surface2),var(--bg2));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;color:var(--accent);margin-bottom:2rem;position:relative;overflow:hidden;}
+.about-avatar::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 50%,rgba(0,212,255,.05));}
+.scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scanAnim 3s linear infinite;opacity:.4;}
+@keyframes scanAnim{0%{top:0%;}100%{top:100%;}}
+.about-card{background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;}
+.about-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));}
+.about-card-corner{position:absolute;bottom:1rem;right:1rem;width:30px;height:30px;border-right:1px solid var(--accent);border-bottom:1px solid var(--accent);opacity:.4;}
+.about-text{color:var(--muted);line-height:1.85;margin-bottom:1.2rem;font-size:1rem;}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2rem;}
+.chip{padding:.4rem .9rem;border:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;transition:all .3s;}
+.chip:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.05);}
+
+/* SKILLS */
+#skills{padding:8rem 4rem;max-width:1300px;margin:0 auto;}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:4rem;}
+.skill-card{background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s,border-color .3s,box-shadow .3s;}
+.skill-card.visible{opacity:1;transform:translateY(0);}
+.skill-card:hover{border-color:var(--accent);box-shadow:0 0 30px rgba(0,212,255,.1);}
+.skill-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .4s;}
+.skill-card:hover::before{transform:scaleY(1);}
+.skill-icon{font-size:1.8rem;margin-bottom:1rem;}
+.skill-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.5rem;}
+.skill-items{font-size:.82rem;color:var(--muted);line-height:1.7;}
+.bar-wrap{margin-top:1.2rem;height:2px;background:var(--border);}
+.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+
+/* EXPERIENCE */
+#experience{padding:8rem 4rem;max-width:1300px;margin:0 auto;}
+.timeline{position:relative;padding-left:2rem;margin-top:4rem;}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),transparent);}
+.tl-item{position:relative;padding:0 0 3.5rem 2.5rem;opacity:0;transform:translateX(-20px);transition:opacity .6s,transform .6s;}
+.tl-item.visible{opacity:1;transform:translateX(0);}
+.tl-dot{position:absolute;left:-.45rem;top:.4rem;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--glow);transition:transform .3s;}
+.tl-item:hover .tl-dot{transform:scale(1.5);}
+.tl-date{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--accent);text-transform:uppercase;margin-bottom:.5rem;}
+.tl-role{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.2rem;}
+.tl-org{font-size:.9rem;color:var(--accent2);margin-bottom:1rem;}
+.tl-desc{color:var(--muted);font-size:.9rem;line-height:1.75;}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem;}
+.tag{padding:.25rem .7rem;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;}
+
+/* PROJECTS */
+#projects{padding:8rem 4rem;max-width:1300px;margin:0 auto;}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem;margin-top:4rem;}
+.proj-card{background:var(--surface);border:1px solid var(--border);padding:2.5rem;position:relative;overflow:hidden;cursor:none;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s,border-color .3s,box-shadow .3s;}
+.proj-card.visible{opacity:1;transform:translateY(0);}
+.proj-card:hover{border-color:rgba(0,212,255,.4);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(0,212,255,.08);transform:translateY(-6px);}
+.proj-num{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted);margin-bottom:1.2rem;opacity:.5;}
+.proj-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:.8rem;}
+.proj-desc{color:var(--muted);font-size:.88rem;line-height:1.75;margin-bottom:1.5rem;}
+.proj-arrow{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:.5rem;transition:gap .3s;}
+.proj-card:hover .proj-arrow{gap:.9rem;}
+.pcorn{position:absolute;width:20px;height:20px;opacity:0;transition:opacity .3s;}
+.pcorn-tl{top:.8rem;left:.8rem;border-top:1px solid var(--accent);border-left:1px solid var(--accent);}
+.pcorn-br{bottom:.8rem;right:.8rem;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent);}
+.proj-card:hover .pcorn{opacity:1;}
+
+/* CERTS */
+#certifications{padding:8rem 4rem;max-width:1300px;margin:0 auto;}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-top:4rem;}
+.cert-item{border:1px solid var(--border);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;opacity:0;transform:scale(.95);transition:opacity .5s,transform .5s,border-color .3s,background .3s;}
+.cert-item.visible{opacity:1;transform:scale(1);}
+.cert-item:hover{border-color:var(--accent3);background:rgba(127,255,110,.03);}
+.cert-icon{color:var(--accent3);font-size:1.1rem;flex-shrink:0;margin-top:.1rem;}
+.cert-name{font-size:.85rem;line-height:1.5;font-weight:500;}
+.cert-prov{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--accent3);text-transform:uppercase;margin-top:.3rem;}
+
+/* ACHIEVEMENTS */
+#achievements{padding:8rem 4rem;background:var(--bg2);position:relative;overflow:hidden;}
+#achievements::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,212,255,.04),transparent 70%);pointer-events:none;}
+.ach-inner{max-width:1300px;margin:0 auto;}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:4rem;}
+.ach-card{padding:2rem;border:1px solid var(--border);background:var(--surface);position:relative;opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s,border-color .3s;}
+.ach-card.visible{opacity:1;transform:translateY(0);}
+.ach-card:hover{border-color:var(--accent2);}
+.ach-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--accent2);opacity:.2;line-height:1;margin-bottom:.5rem;}
+.ach-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.5rem;}
+.ach-desc{font-size:.85rem;color:var(--muted);line-height:1.65;}
+
+/* COVER LETTER */
+#cover-letter{padding:8rem 4rem;max-width:1300px;margin:0 auto;}
+.cover-wrap{border:1px solid var(--border);background:var(--surface);position:relative;}
+.cover-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));}
+.cover-head{padding:3rem 3rem 2rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem;}
+.cl-label{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:.5rem;}
+.cl-val{font-size:.9rem;}
+.cover-body{padding:3rem;}
+.cl-para{color:var(--muted);line-height:1.9;font-size:.97rem;margin-bottom:1.5rem;}
+.cl-para strong{color:var(--text);font-weight:500;}
+.cl-quote{border-left:2px solid var(--accent);padding-left:1.5rem;margin:2rem 0;color:var(--text);font-size:1rem;line-height:1.8;font-style:italic;}
+.cover-sign{margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border);}
+.sign-name{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent);margin-top:.5rem;}
+.sign-sub{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-top:.5rem;}
+
+/* CONTACT */
+#contact{padding:8rem 4rem;text-align:center;position:relative;overflow:hidden;}
+#contact::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,212,255,.05) 0%,transparent 70%);pointer-events:none;}
+.contact-inner{position:relative;z-index:1;max-width:700px;margin:0 auto;}
+.contact-big{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:800;line-height:1.1;margin-bottom:1.5rem;}
+.contact-sub{color:var(--muted);line-height:1.7;margin-bottom:3rem;font-size:1.05rem;}
+.contact-links{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:3rem;}
+.contact-link{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.15em;color:var(--muted);text-decoration:none;text-transform:uppercase;transition:color .3s;border-bottom:1px solid var(--border);padding-bottom:.3rem;}
+.contact-link:hover{color:var(--accent);border-color:var(--accent);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;position:relative;z-index:1;}
+
+/* GLITCH */
+.glitch{position:relative;}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;}
+.glitch::before{color:var(--accent2);clip-path:polygon(0 0,100% 0,100% 45%,0 45%);animation:g1 3s infinite;}
+.glitch::after{color:var(--accent);clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%);animation:g2 3s infinite;}
+@keyframes g1{0%,90%,100%{transform:translateX(0);}92%{transform:translateX(-2px);}94%{transform:translateX(2px);}96%{transform:translateX(-1px);}}
+@keyframes g2{0%,90%,100%{transform:translateX(0);}92%{transform:translateX(2px);}94%{transform:translateX(-2px);}96%{transform:translateX(1px);}}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{gap:1.2rem;}
+  .nav-links a{font-size:.62rem;}
+  #hero{padding:6rem 1.5rem 4rem;}
+  .hero-stats{display:none;}
+  #about{grid-template-columns:1fr;padding:5rem 1.5rem;gap:3rem;}
+  #skills,#experience,#projects,#certifications,#achievements,#cover-letter,#contact{padding:5rem 1.5rem;}
+  .cover-head{flex-direction:column;}
+  footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">VKR_</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#cover-letter">Cover Letter</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Robotics Instructor &amp; Embedded Systems Engineer</div>
+    <h1 class="hero-name">
+      <span class="l1">VISHAL</span>
+      <span class="l2 glitch" data-text="KUMAR RAJ">KUMAR RAJ</span>
+    </h1>
+    <p class="hero-sub">Robotics Instructor &amp; Embedded Systems Engineer crafting the next generation of innovators through hands-on IoT, ROS, and AI-integrated robotics education.</p>
+    <div class="hero-ctas">
+      <a href="#experience" class="btn-primary"><span>View Experience</span></a>
+      <a href="#cover-letter" class="btn-ghost">Read Cover Letter</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="cgpa">8.76</div>
+      <div class="stat-label">CGPA</div>
+      <div class="stat-div"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="exp">5+</div>
+      <div class="stat-label">Years Experience</div>
+      <div class="stat-div"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="proj">10+</div>
+      <div class="stat-label">Projects Built</div>
+      <div class="stat-div"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">7</div>
+      <div class="stat-label">Certifications</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Arduino<span class="mdot"></span></span>
+    <span class="marquee-item">Raspberry Pi<span class="mdot"></span></span>
+    <span class="marquee-item">ROS<span class="mdot"></span></span>
+    <span class="marquee-item">ESP32<span class="mdot"></span></span>
+    <span class="marquee-item">Python<span class="mdot"></span></span>
+    <span class="marquee-item">TensorFlow<span class="mdot"></span></span>
+    <span class="marquee-item">IoT<span class="mdot"></span></span>
+    <span class="marquee-item">Machine Learning<span class="mdot"></span></span>
+    <span class="marquee-item">OpenCV<span class="mdot"></span></span>
+    <span class="marquee-item">Embedded Systems<span class="mdot"></span></span>
+    <span class="marquee-item">Arduino<span class="mdot"></span></span>
+    <span class="marquee-item">Raspberry Pi<span class="mdot"></span></span>
+    <span class="marquee-item">ROS<span class="mdot"></span></span>
+    <span class="marquee-item">ESP32<span class="mdot"></span></span>
+    <span class="marquee-item">Python<span class="mdot"></span></span>
+    <span class="marquee-item">TensorFlow<span class="mdot"></span></span>
+    <span class="marquee-item">IoT<span class="mdot"></span></span>
+    <span class="marquee-item">Machine Learning<span class="mdot"></span></span>
+    <span class="marquee-item">OpenCV<span class="mdot"></span></span>
+    <span class="marquee-item">Embedded Systems<span class="mdot"></span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <div class="about-avatar">
+      VKR
+      <div class="scan"></div>
+    </div>
+    <div class="about-card">
+      <div class="about-card-corner"></div>
+      <div style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;">// current_status</div>
+      <div style="font-size:.9rem;line-height:1.9;">
+        <span style="color:var(--muted);">role:</span> Robotics Instructor &amp; Embedded Systems Engineer<br>
+        <span style="color:var(--muted);">location:</span> Ranchi, Jharkhand<br>
+        <span style="color:var(--muted);">specialization:</span> ROS &middot; IoT &middot; AI/CV<br>
+        <span style="color:var(--muted);">education:</span> B.Tech ECE &mdash; 8.76 CGPA<br>
+        <span style="color:var(--muted);">linkedin:</span> <a href="https://www.linkedin.com/in/vishal-kumar-raj-b31740399/" target="_blank" style="color:var(--accent);text-decoration:none;">vishal-kumar-raj</a><br>
+        <span style="color:var(--muted);">status:</span> <span style="color:var(--accent3);">&#9679; Open to Opportunities</span>
+      </div>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title">Building Engineers,<br>Not Just Robots.</h2>
+    <p class="about-text">I'm a Robotics Trainer and Embedded Systems Engineer passionate about making complex technology accessible and exciting. With hands-on experience delivering workshops on IoT, ROS, Raspberry Pi, and Arduino, I bridge the gap between hardware and human understanding.</p>
+    <p class="about-text">From ISRO-affiliated ML research at NIT Surathkal to teaching autonomous robot design at PM Shri Navodaya Vidyalaya, my journey has been rooted in real-world engineering and education. B.Tech in ECE from Central University of Karnataka with an 8.76 CGPA.</p>
+    <p class="about-text">I believe the best robotics education happens when students build, break, and fix &mdash; and I design every session around exactly that philosophy.</p>
+    <div class="chips">
+      <span class="chip">Robotics</span>
+      <span class="chip">ROS</span>
+      <span class="chip">IoT</span>
+      <span class="chip">Arduino</span>
+      <span class="chip">Raspberry Pi</span>
+      <span class="chip">ESP32</span>
+      <span class="chip">Python</span>
+      <span class="chip">TensorFlow</span>
+      <span class="chip">OpenCV</span>
+      <span class="chip">MATLAB</span>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal" style="text-align:center;">
+    <div class="section-label" style="justify-content:center;">Technical Arsenal</div>
+    <h2 class="section-title">What I Work With</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card" data-bar="90">
+      <div class="skill-icon">&#129302;</div>
+      <div class="skill-name">Microcontrollers &amp; SBCs</div>
+      <div class="skill-items">Arduino UNO &middot; Raspberry Pi &middot; ESP32 &middot; ESP8266</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+    <div class="skill-card" data-bar="85">
+      <div class="skill-icon">&#127758;</div>
+      <div class="skill-name">Robotics &amp; IoT</div>
+      <div class="skill-items">ROS &middot; IoT Architecture &middot; Home Automation &middot; Sensor/Actuator Integration</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+    <div class="skill-card" data-bar="88">
+      <div class="skill-icon">&#9889;</div>
+      <div class="skill-name">Sensors &amp; Actuators</div>
+      <div class="skill-items">PIR &middot; LDR &middot; Ultrasonic &middot; RF Tx/Rx &middot; Servo &amp; DC Motors &middot; Fire/Smoke</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+    <div class="skill-card" data-bar="85">
+      <div class="skill-icon">&#128013;</div>
+      <div class="skill-name">Programming</div>
+      <div class="skill-items">Python (Scikit-learn, OpenCV, NLTK) &middot; MATLAB &middot; C/C++ &middot; Assembly (x86, MIPS)</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+    <div class="skill-card" data-bar="75">
+      <div class="skill-icon">&#129504;</div>
+      <div class="skill-name">AI / ML &amp; Computer Vision</div>
+      <div class="skill-items">TensorFlow &middot; Machine Learning &middot; OpenCV &middot; Computer Vision Basics</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+    <div class="skill-card" data-bar="70">
+      <div class="skill-icon">&#128295;</div>
+      <div class="skill-name">CAD &amp; Design Tools</div>
+      <div class="skill-items">TinkerCAD &middot; FreeCAD (3D Printing) &middot; Fritzing &middot; Proteus Design Suite</div>
+      <div class="bar-wrap"><div class="bar"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="reveal">
+    <div class="section-label">Work History</div>
+    <h2 class="section-title">Professional Experience</h2>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Sep 2025 &mdash; Present</div>
+      <div class="tl-role">Robotics Instructor</div>
+      <div class="tl-org">NxtWave Disruptive Technologies Pvt. Ltd.</div>
+      <div class="tl-desc">Delivering hands-on workshops and structured courses on Robotics, IoT, ROS, and Raspberry Pi to engineering students. Conducted live sessions on ROS framework covering nodes, topics, publishers/subscribers, and robot simulation. Mentored students in building IoT systems using Raspberry Pi, ESP32, and Arduino.</div>
+      <div class="tags">
+        <span class="tag">ROS</span><span class="tag">Raspberry Pi</span><span class="tag">IoT</span><span class="tag">Arduino</span><span class="tag">ESP32</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Dec 2024 &mdash; Aug 2025</div>
+      <div class="tl-role">Robotics Instructor &amp; Developer</div>
+      <div class="tl-org">Mark to Fashion Tech Pvt. Ltd., Ranchi</div>
+      <div class="tl-desc">Developed and deployed functional embedded systems using Arduino and Raspberry Pi for industrial and commercial use cases. Designed circuit layouts, integrated sensors/actuators, and optimized IoT automation systems. Taught robotics at PM Shri Jawahar Navodaya Vidyalaya, Dhanbad.</div>
+      <div class="tags">
+        <span class="tag">Arduino</span><span class="tag">Raspberry Pi</span><span class="tag">Embedded Systems</span><span class="tag">Robotics Training</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Jun 2024 &mdash; Oct 2024</div>
+      <div class="tl-role">Science &amp; Physics Faculty</div>
+      <div class="tl-org">Gurukul Public School, Darbhanga, Bihar</div>
+      <div class="tl-desc">Taught Physics to Grade 11 &amp; 12 students for Board Exams and IIT JEE preparation. Strengthened conceptual understanding through problem-solving sessions and hands-on demonstrations.</div>
+      <div class="tags">
+        <span class="tag">Physics</span><span class="tag">IIT JEE</span><span class="tag">Education</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Jun 2022 &mdash; Aug 2022</div>
+      <div class="tl-role">Summer Research Intern</div>
+      <div class="tl-org">NIT Surathkal (ISRO RESPOND Project)</div>
+      <div class="tl-desc">Conducted research on "ML Regression Approach to Optical Waveguide" under Dr. Mandeep Singh. Part of an ISRO-sponsored RESPOND project. Applied regression models to waveguide behavior &mdash; directly applicable to robotics sensor systems.</div>
+      <div class="tags">
+        <span class="tag">Machine Learning</span><span class="tag">ISRO</span><span class="tag">Research</span><span class="tag">Python</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <div class="section-label">Work Samples</div>
+    <h2 class="section-title">Key Projects</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="proj-card">
+      <div class="pcorn pcorn-tl"></div>
+      <div class="pcorn pcorn-br"></div>
+      <div class="proj-num">PROJECT / 01</div>
+      <div class="proj-title">Home &amp; Restaurant Service Robot</div>
+      <div class="proj-desc">Autonomous RF-controlled waiter robot on Arduino UNO. Achieves 1 km RF range, 1-hour battery life on 12V battery, and 5&ndash;7 kg payload capacity.</div>
+      <div class="tags" style="margin-bottom:1.2rem;"><span class="tag">Arduino UNO</span><span class="tag">RF Comms</span><span class="tag">Autonomy</span></div>
+      <div class="proj-arrow">View Details &rarr;</div>
+    </div>
+    <div class="proj-card">
+      <div class="pcorn pcorn-tl"></div>
+      <div class="pcorn pcorn-br"></div>
+      <div class="proj-num">PROJECT / 02</div>
+      <div class="proj-title">IoT Home Automation System</div>
+      <div class="proj-desc">Smart building system using PIR, LDR sensors, ESP8266, and Arduino UNO. Real-time data on ThingSpeak with occupancy detection and automatic lighting.</div>
+      <div class="tags" style="margin-bottom:1.2rem;"><span class="tag">ESP8266</span><span class="tag">PIR/LDR</span><span class="tag">ThingSpeak</span></div>
+      <div class="proj-arrow">View Details &rarr;</div>
+    </div>
+    <div class="proj-card">
+      <div class="pcorn pcorn-tl"></div>
+      <div class="pcorn pcorn-br"></div>
+      <div class="proj-num">PROJECT / 03</div>
+      <div class="proj-title">Smart Voice Assistant (Python)</div>
+      <div class="proj-desc">Desktop voice assistant with NLP &amp; audio processing for weather, email, Wikipedia, COVID-19 updates, attendance, and fire detection alerts.</div>
+      <div class="tags" style="margin-bottom:1.2rem;"><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">OpenCV</span></div>
+      <div class="proj-arrow">View Details &rarr;</div>
+    </div>
+    <div class="proj-card">
+      <div class="pcorn pcorn-tl"></div>
+      <div class="pcorn pcorn-br"></div>
+      <div class="proj-num">PROJECT / 04</div>
+      <div class="proj-title">ML Optical Waveguide Research</div>
+      <div class="proj-desc">Applied ML regression to model optical waveguide behavior. ISRO-sponsored RESPOND project at NIT Surathkal under Dr. Mandeep Singh.</div>
+      <div class="tags" style="margin-bottom:1.2rem;"><span class="tag">ML Regression</span><span class="tag">ISRO</span><span class="tag">MATLAB</span></div>
+      <div class="proj-arrow">View Details &rarr;</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="reveal">
+    <div class="section-label">Learning Path</div>
+    <h2 class="section-title">Certifications &amp; Training</h2>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">DeepLearning.AI TensorFlow Developer Specialization</div><div class="cert-prov">DeepLearning.AI &middot; Coursera</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">ML with TensorFlow on Google Cloud Platform</div><div class="cert-prov">Google &middot; Coursera</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">Google IT Automation with Python Specialization</div><div class="cert-prov">Google &middot; Coursera</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">Python for Everybody Specialization</div><div class="cert-prov">University of Michigan &middot; Coursera</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">Introduction to IoT and Embedded Systems</div><div class="cert-prov">University of California &middot; Coursera</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">Google IT Support Specialization</div><div class="cert-prov">Google &middot; Coursera</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">&#10022;</div>
+      <div><div class="cert-name">Build Your Portfolio Website with HTML &amp; CSS</div><div class="cert-prov">Coursera Project Network</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="ach-inner">
+    <div class="reveal">
+      <div class="section-label">Recognition</div>
+      <h2 class="section-title">Achievements &amp; Leadership</h2>
+    </div>
+    <div class="ach-grid">
+      <div class="ach-card">
+        <div class="ach-num">01</div>
+        <div class="ach-title">Smart India Hackathon &mdash; Grand Finalist</div>
+        <div class="ach-desc">Selected for grand finale under Ministry of Power for Team HYDROTHRUSTER. Conducted by MHRD, India. SIH 2019&ndash;20.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">02</div>
+        <div class="ach-title">IEEE SB-CUK SIGHT Chair</div>
+        <div class="ach-desc">Led IEEE Student Branch society initiatives for 2020&ndash;21. Built the official TECHIESTA 2020 event website. Received Token of Appreciation.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">03</div>
+        <div class="ach-title">Certificate of Appreciation &mdash; GeeksforGeeks</div>
+        <div class="ach-desc">Recognized by GeeksforGeeks for contributions and demonstrated programming expertise.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">04</div>
+        <div class="ach-title">Science Exhibition &mdash; 1st Prize</div>
+        <div class="ach-desc">Won school-level science exhibition and selected for Zonal Level at Kota as part of a 3-member team.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">05</div>
+        <div class="ach-title">Youth Parliament Competition 2018</div>
+        <div class="ach-desc">Participated and received award in Youth Parliament organized by Kendriya Vidyalaya Sangathan.</div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-num">06</div>
+        <div class="ach-title">SUPW Club Captain &amp; School Prefect</div>
+        <div class="ach-desc">Served as school-level SUPW Captain and Prefect, demonstrating early leadership capabilities.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COVER LETTER -->
+<section id="cover-letter">
+  <div class="reveal" style="margin-bottom:3rem;">
+    <div class="section-label">Application</div>
+    <h2 class="section-title">Cover Letter</h2>
+    <p style="color:var(--muted);font-size:.95rem;margin-top:.5rem;">Senior Robotic Trainer &mdash; Newton School of Engineering</p>
+  </div>
+  <div class="cover-wrap reveal">
+    <div class="cover-head">
+      <div>
+        <div class="cl-label">From</div>
+        <div class="cl-val">Vishal Kumar Raj<br><span style="color:var(--muted);font-size:.85rem;">vishalraj@cuk.ac.in &middot; +91 63-500-63760</span></div>
+      </div>
+      <div>
+        <div class="cl-label">To</div>
+        <div class="cl-val">Hiring Committee<br><span style="color:var(--muted);font-size:.85rem;">Newton School of Engineering</span></div>
+      </div>
+      <div>
+        <div class="cl-label">Position</div>
+        <div class="cl-val">Senior Robotic Trainer</div>
+      </div>
+      <div>
+        <div class="cl-label">Date</div>
+        <div class="cl-val">February 2026</div>
+      </div>
+    </div>
+    <div class="cover-body">
+      <p class="cl-para">Dear Hiring Committee,</p>
+      <p class="cl-para">I am writing to express my strong interest in the <strong>Senior Robotic Trainer</strong> position at Newton School of Engineering. As a Robotics Instructor currently at <strong>NxtWave Disruptive Technologies Pvt. Ltd.</strong> &mdash; where I deliver live workshops on ROS, Raspberry Pi, IoT, and ESP32 &mdash; and with a B.Tech in Electronics &amp; Communication Engineering (CGPA: 8.76) from Central University of Karnataka, I am confident that my technical depth and passion for engineering education make me an excellent fit for this role.</p>
+      <div class="cl-quote">"The best engineers are not those who only build &mdash; they are those who can help others build. That conviction drives everything I do in the classroom."</div>
+      <p class="cl-para">My hands-on experience with <strong>Arduino, Raspberry Pi, ESP32, and ESP8266</strong> spans years of both building real robotics systems and teaching them. I've developed autonomous RF-controlled service robots, IoT home automation networks with ThingSpeak visualization, and Python-based voice assistant systems that leverage NLP and sensor pipelines. These aren't just projects on a resume &mdash; they are curricula I've adapted and taught to hundreds of engineering students.</p>
+      <p class="cl-para">At <strong>NxtWave Disruptive Technologies</strong>, I've designed and delivered project-based learning modules on ROS, covering nodes, topics, publishers/subscribers, and robot simulation. Prior to this, at <strong>Mark to Fashion Tech Pvt. Ltd.</strong>, I taught robotics at PM Shri Jawahar Navodaya Vidyalaya in Dhanbad &mdash; guiding students with zero prior exposure to microcontrollers through to building functional embedded systems.</p>
+      <p class="cl-para">My ISRO-affiliated research internship at <strong>NIT Surathkal</strong> on "Machine Learning Regression for Optical Waveguides" gave me practical AI/ML integration experience. I hold 7 Coursera specializations including <strong>DeepLearning.AI TensorFlow Developer</strong> and <strong>Google ML on Cloud Platform</strong>, keeping my knowledge continuously updated.</p>
+      <p class="cl-para">As <strong>IEEE SB-CUK SIGHT Chair</strong> and Smart India Hackathon Grand Finalist, I've operated in high-stakes collaborative environments that demand leadership, communication, and the ability to translate complexity into clarity &mdash; exactly what a Senior Trainer must embody every day.</p>
+      <p class="cl-para">Newton School of Engineering's commitment to producing industry-ready engineers aligns perfectly with my teaching philosophy: theory serves the build, and the build reveals the gaps in theory. I would bring a trainer who codes before teaching, builds before explaining, and genuinely loves watching a student's robot come to life for the first time.</p>
+      <p class="cl-para">I would be thrilled to discuss how I can contribute to your robotics program. Thank you for your time and consideration.</p>
+      <div class="cover-sign">
+        <div style="color:var(--muted);font-size:.9rem;">Sincerely,</div>
+        <div class="sign-name">Vishal Kumar Raj</div>
+        <div class="sign-sub">Robotics Trainer &middot; Embedded Systems Engineer &middot; B.Tech ECE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label" style="justify-content:center;">Get In Touch</div>
+    <h2 class="contact-big">Let's Build<br><span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Together.</span></h2>
+    <p class="contact-sub">Open to Senior Robotics Trainer roles, workshops, and embedded systems collaborations. Let's connect.</p>
+    <a href="mailto:vishalraj@cuk.ac.in" class="btn-primary"><span>Say Hello &rarr;</span></a>
+    <div class="contact-links">
+      <a href="mailto:vishalraj@cuk.ac.in" class="contact-link">vishalraj@cuk.ac.in</a>
+      <a href="mailto:vishufeb786@gmail.com" class="contact-link">vishufeb786@gmail.com</a>
+      <a href="https://www.linkedin.com/in/vishal-kumar-raj-b31740399/" target="_blank" class="contact-link">LinkedIn</a>
+      <a href="https://bit.ly/3xUPdfT" target="_blank" class="contact-link">Portfolio</a>
+      <a href="https://bit.ly/3o2G14o" target="_blank" class="contact-link">GitHub</a>
+      <span class="contact-link" style="cursor:default;">+91 63-500-63760</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>&copy; 2026 Vishal Kumar Raj</span>
+  <span>Ranchi, Jharkhand &middot; India</span>
+  <span>Built with passion for engineering</span>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', function(e) {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a, button, .skill-card, .proj-card, .cert-item, .ach-card').forEach(function(el) {
+  el.addEventListener('mouseenter', function() {
+    cursor.style.width = '20px'; cursor.style.height = '20px';
+    ring.style.width = '50px'; ring.style.height = '50px';
+    cursor.style.background = 'var(--accent2)';
+  });
+  el.addEventListener('mouseleave', function() {
+    cursor.style.width = '12px'; cursor.style.height = '12px';
+    ring.style.width = '36px'; ring.style.height = '36px';
+    cursor.style.background = 'var(--accent)';
+  });
+});
+
+// INTERSECTION OBSERVER
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      var bar = entry.target.querySelector('.bar');
+      if (bar) {
+        var pct = entry.target.getAttribute('data-bar');
+        setTimeout(function() { bar.style.width = pct + '%'; }, 200);
+      }
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal, .skill-card, .tl-item, .proj-card, .cert-item, .ach-card').forEach(function(el) {
+  observer.observe(el);
+});
+
+// STAGGER DELAYS
+document.querySelectorAll('.tl-item').forEach(function(el, i) { el.style.transitionDelay = (i * 0.1) + 's'; });
+document.querySelectorAll('.cert-item').forEach(function(el, i) { el.style.transitionDelay = (i * 0.07) + 's'; });
+document.querySelectorAll('.skill-card').forEach(function(el, i) { el.style.transitionDelay = (i * 0.08) + 's'; });
+document.querySelectorAll('.proj-card').forEach(function(el, i) { el.style.transitionDelay = (i * 0.1) + 's'; });
+document.querySelectorAll('.ach-card').forEach(function(el, i) { el.style.transitionDelay = (i * 0.08) + 's'; });
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    var target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// COUNTER ANIMATION
+function animCount(el, target, isFloat) {
+  var start = null;
+  var dur = 2000;
+  function step(timestamp) {
+    if (!start) start = timestamp;
+    var prog = Math.min((timestamp - start) / dur, 1);
+    var ease = 1 - Math.pow(1 - prog, 3);
+    var val = isFloat ? (ease * target).toFixed(2) : Math.floor(ease * target);
+    el.textContent = val + (isFloat ? '' : '+');
+    if (prog < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+var statsObs = new IntersectionObserver(function(entries) {
+  if (entries[0].isIntersecting) {
+    var nums = document.querySelectorAll('.stat-num');
+    if (nums.length >= 3) {
+      animCount(nums[0], 8.76, true);
+      animCount(nums[1], 5, false);
+      animCount(nums[2], 10, false);
+    }
+    statsObs.disconnect();
+  }
+}, { threshold: 0.5 });
+
+var statsEl = document.querySelector('.hero-stats');
+if (statsEl) statsObs.observe(statsEl);
+</script>
+</body>
+</html>
